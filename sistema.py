@@ -3,7 +3,11 @@ import numpy as np
 
 
 def f(t,u):
-	return -50*(u-np.cos(t))
+	r=(u[0]**2+u[2]**2)**(3/2)
+	return np.array ([u[1], -u[0]/r, u[3], -u[2]/r])
+
+#	return (u+np.cos(u))*(1+np.cos(t))
+#	return -50*(u-np.cos(t))
 #	return u**2-u**3
 #	return np.array([u[1], -100*u[0]-101*u[1]])
 #	return np.sqrt(1+u)
@@ -239,9 +243,86 @@ def pred_corr_adams_4(h,Tmax,u1):
 		fn[3] = f( (i+3)*h,  u[i+3,:])
 		u[i+4,:] = u[i+3,:] + h*(-9*fn[0] + 37*fn[1]- 59*fn[2]+ 55*fn[3])/24
 
+
+		fn[4] = f( (i+4)*h,  u[i+4,:])
+		u[i+4,:] = u[i+3,:] + h*(fn[1] - 5*fn[2] + 19*fn[3]+ 9*fn[4])/24
+
+	
+		fn[0]=fn[1]
+		fn[1]=fn[2]
+		fn[2]=fn[3]
+		
+
+	return u
+
+
+def pred_corr_adams_4_iterado(h,Tmax,u1):
+	dim=np.size(u1)
+	itmax=np.int(Tmax/h)
+	u=np.empty((itmax+1,dim))
+	u[0,:]=u1
+	fn=np.empty((5,dim))
+
+	#inicaliza com RK4
+	for i in np.arange(0,3):
+		t=i*h
+		k1 = f(t,     u[i,:]         )
+		k2 = f(t+h/2, u[i,:] + h*k1/2)
+		k3 = f(t+h/2, u[i,:] + h*k2/2)
+		k4 = f(t+h,   u[i,:] + h*k3  )
+
+		u[i+1,:]=u[i,:]+h*(k1+2*k2+2*k3+k4)/6
+		fn[i]=k1
+
+
+
+	for i in np.arange(0,itmax-3):
+		fn[3] = f( (i+3)*h,  u[i+3,:])
+		u[i+4,:] = u[i+3,:] + h*(-9*fn[0] + 37*fn[1]- 59*fn[2]+ 55*fn[3])/24
+
 		for k in [0,1,2,3]:	
 			fn[4] = f( (i+4)*h,  u[i+4,:])
 			u[i+4,:] = u[i+3,:] + h*(fn[1] - 5*fn[2] + 19*fn[3]+ 9*fn[4])/24
+
+
+		erro = 1
+		while (erro>1e-10*np.linalg.norm(u[i+4,:])):
+			fn[4] = f( (i+4)*h,  u[i+4,:])
+			u_til=u[i+4,:]
+			u[i+4,:] = u[i+3,:] + h*(fn[1] - 5*fn[2] + 19*fn[3]+ 9*fn[4])/24
+			erro=np.linalg.norm(u_til-u[i+4,:])
+	
+		fn[0]=fn[1]
+		fn[1]=fn[2]
+		fn[2]=fn[3]
+		
+
+	return u
+def pred_corr_adams_45(h,Tmax,u1):
+	dim=np.size(u1)
+	itmax=np.int(Tmax/h)
+	u=np.empty((itmax+1,dim))
+	u[0,:]=u1
+	fn=np.empty((5,dim))
+
+	#inicaliza com RK4
+	for i in np.arange(0,3):
+		t=i*h
+		k1 = f(t,     u[i,:]         )
+		k2 = f(t+h/2, u[i,:] + h*k1/2)
+		k3 = f(t+h/2, u[i,:] + h*k2/2)
+		k4 = f(t+h,   u[i,:] + h*k3  )
+
+		u[i+1,:]=u[i,:]+h*(k1+2*k2+2*k3+k4)/6
+		fn[i]=k1
+
+	for i in np.arange(0,itmax-3):
+		fn[3] = f( (i+3)*h,  u[i+3,:])
+		u[i+4,:] = u[i+3,:] + h*(-9*fn[0] + 37*fn[1]- 59*fn[2]+ 55*fn[3])/24
+
+		for k in [0,1,2,3,4]:	
+			fn[4] = f( (i+4)*h,  u[i+4,:])
+			u[i+4,:] = u[i+3,:] + h*(-19*fn[0] + 106*fn[1] - 264*fn[2] + 646*fn[3]+ 251*fn[4])/720
 
 	
 		fn[0]=fn[1]
@@ -253,21 +334,28 @@ def pred_corr_adams_4(h,Tmax,u1):
 
 
 
+
+
+
 #u0=np.array([101,-10001])
-u0=0.01
-h=1e-2
-Tmax=1000
+#u0=0.00
+u0=np.array([.4, 0, 0, 2])
+h=1e-1
+Tmax=6.2753128429377992928930580
 itmax=np.int(Tmax/h)
 
 #for metodo in [euler, euler_mod, RK3_classico, RK4_classico, adams_bash_2]:
 #for metodo in [euler_mod, adams_bash_2, pred_corr_adams_2, pred_corr_adams_2_iterado, RK4_classico]:
 
 
-for metodo in [pred_corr_adams_4, adams_bash_4,  RK4_classico,adams_bash_2, pred_corr_adams_2]:
-	u=metodo(h,Tmax,u0)
-	print u[itmax,:]
+for metodo in [euler,  RK4_classico, pred_corr_adams_4, pred_corr_adams_4, pred_corr_adams_4_iterado, pred_corr_adams_45]:
+	for h in [1e-1, 1e-2, 1e-3]:
+		itmax=np.int(Tmax/h)
+		u=metodo(h,Tmax,u0)
+		print u[itmax,:]
+	print 	
 #	print u
-print 100*np.exp(-100*Tmax)+np.exp(-Tmax)
+#print 100*np.exp(-100*Tmax)+np.exp(-Tmax)
 
 	#for i in np.arange(0,itmax+1):
 #print u
