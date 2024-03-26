@@ -523,7 +523,7 @@ Use esta estimativa para iniciar o método de bisseção e obtenha o valor da ra
   \begin{equation}
     \tau=k\theta,
   \end{equation}
-onde $\theta$ é ângulo da plataforma com a horizontal e $k$ é uma constante positiva. A plataforma é feita de material homogêneo, seu peso é $P$ e sua largura é $l$. Modele a relação entre o ângulo $\theta$ e o peso $P$ próprio da plataforma. Encontre o valor de $\theta$ quando $l=1~\mbox{m}$, $P=200~\mbox{N}$, $k=50~\mbox{Nm}/\mbox{rad}$, sabendo que o sistema está em equilíbrio. Use o método da bisseção e expresse o resultado com 4 algarismos significativos.
+onde $\theta$ é ângulo da plataforma com a horizontal e $k$ é uma constante positiva. A plataforma é feita de material homogêneo, seu peso é $P$ e sua comprimento é $l$. Modele a relação entre o ângulo $\theta$ e o peso $P$ próprio da plataforma. Encontre o valor de $\theta$ quando $l=1~\mbox{m}$, $P=200~\mbox{N}$, $k=50~\mbox{Nm}/\mbox{rad}$, sabendo que o sistema está em equilíbrio. Use o método da bisseção e expresse o resultado com 4 algarismos significativos.
 \end{exer}
 \begin{resp}
     $k\theta=\frac{lP}{2}\cos(\theta)$ com $\theta\in (0, \pi/2)$; $1,030$.
@@ -544,21 +544,23 @@ onde $t$ é um número real positivo. Mostre que esta equação possui uma únic
   \begin{equation}
     I_d=I_R\left(\exp\left(\frac{v_d}{v_t}\right)-1\right),
   \end{equation}
-onde $I_R$ é a corrente de condução reversa e $v_t$, a tensão térmica dada por $v_t=\frac{kT}{q}$ com $k$, a constante de Boltzmann, $T$ a temperatura de operação e $q$, a carga do elétron. Aqui  $I_R=1pA=10^{-12}~\mbox{A}$, $T=300~\mbox{K}$. Escreva o problema como uma equação na incógnita $v_d$ e, usando o método da bisseção, resolva este problema com 3 algarismos significativos para os seguintes casos:
-\end{exer}
+onde $I_R$ é a corrente de condução reversa e $v_t$, a tensão térmica dada por $v_t=\frac{kT}{q}$ com $k$, a constante de Boltzmann, $T$ a temperatura de operação e $q$, a carga do elétron. Aqui  $I_R=1pA=10^{-12}~\mbox{A}$, $T=300~\mbox{K}$. Escreva o problema como uma equação na incógnita $v_d$ e, usando o método da bisseção, resolva este problema com 3 algarismos significativos para os seguintes casos:\\
+
 \begin{minipage}[l]{0.6\linewidth}
-\begin{itemize}
-\item[a)] $V=30~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
-\item[b)] $V=3~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
-\item[c)] $V=3~\mbox{V}$ e $R=10~\mbox{k}\Omega$.
-\item[d)] $V=300~\mbox{mV}$ e $R=1~\mbox{k}\Omega$.
-\item[e)] $V=-300~\mbox{mV}$ e $R=1~\mbox{k}\Omega$.
-\item[f)] $V=-30~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
-\item[g)] $V=-30~\mbox{V}$ e $R=10~\mbox{k}\Omega$.
-\end{itemize}\end{minipage}\begin{minipage}[c]{0.4\linewidth}
-\includegraphics[width=0.9\textwidth]{./cap_equacao1d/pics/circuito_diodo.eps}
-\end{minipage}\\
-Dica: $V=RI_d+v_d$.
+  \begin{itemize}
+    \item[a)] $V=30~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
+    \item[b)] $V=3~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
+    \item[c)] $V=3~\mbox{V}$ e $R=10~\mbox{k}\Omega$.
+    \item[d)] $V=300~\mbox{mV}$ e $R=1~\mbox{k}\Omega$.
+    \item[e)] $V=-300~\mbox{mV}$ e $R=1~\mbox{k}\Omega$.
+    \item[f)] $V=-30~\mbox{V}$ e $R=1~\mbox{k}\Omega$.
+    \item[g)] $V=-30~\mbox{V}$ e $R=10~\mbox{k}\Omega$.
+  \end{itemize}\end{minipage}\begin{minipage}[c]{0.4\linewidth}
+    \includegraphics[width=0.9\textwidth]{./cap_equacao1d/pics/circuito_diodo.eps}
+  \end{minipage}\\
+
+  Dica: $V=RI_d+v_d$.
+\end{exer}
 \begin{resp}
     a) $0,623$; b) $0,559$; c) $0,500$; d) $0,300$; e) $-0,3$; f) $-30$; g) $-30$
 \end{resp}
