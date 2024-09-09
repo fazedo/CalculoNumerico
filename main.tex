@@ -1,144 +1,259 @@
-%Este trabalho está licenciado sob a Licença Creative Commons Atribuição-CompartilhaIgual 3.0 Não Adaptada. Para ver uma cópia desta licença, visite https://creativecommons.org/licenses/by-sa/3.0/ ou envie uma carta para Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+\documentclass[twoside,11pt]{book}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ATENÇÃO
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Opcões de Linguagem
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[brazil]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{bookml/bookml}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ams-latex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Ambientes 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\theoremstyle{plain}  %   bold title, italic body
+\newtheorem{teo}{Teorema}[section]
+\newtheorem{lem}{Lema}[section]
+\newtheorem{prop}{Proposição}[section]
+\newtheorem{corol}{Corolário}[section]
+\newtheorem{defn}{Definição}[section]
+\theoremstyle{remark}  % italic title, romman body
+\theoremstyle{definition}  % italic title, romman body
+\newtheorem{obs}{Observação}[section]
+\newtheorem{ex}{Exemplo}[section]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graphics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphics}
+\usepackage{graphicx}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuração dos exercícios
+% Caso livro: pacote exercise
+% Caso xml: define newtheorems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\iflatexml 
+\input{config_exer_xml.tex}
+\else 
+\usepackage[a4paper,headheight=15.4pt]{geometry}
+\input{config_exer_pdf.tex}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Fancy Header
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RE]{Cálculo numérico}
+\fancyhead[LO]{\rightmark}
+\fancyhead[LE,RO]{\thepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Miscellaneous
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+\renewcommand{\arraystretch}{1.5}  % space between rows in tables
+\usepackage{array,booktabs}
+\usepackage{xcolor}
+%\usepackage{tikz}
+\usepackage{microtype}
+\usepackage{makeidx}
+\usepackage{subfiles} % independent chapters
+
+% license footnote
+\cfoot{\tiny{Licença \href{https://creativecommons.org/licenses/by-sa/3.0/}{CC-BY-SA-3.0}. Contato: \url{reamat@ufrgs.br}}}
+
+% no blank pages between chapters
+\let\cleardoublepage\clearpage
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% MACROS E NOVOS COMANDOS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \DeclareTextFontCommand{\emph}{\bfseries}
+\DeclareMathOperator*{\sen}{sen}
+\DeclareMathOperator*{\senh}{senh}
+\renewcommand{\sin}{\operatorname{\sen}}
+\renewcommand{\sinh}{\operatorname{\senh}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define o ambiente abstract, que não é padrão no book
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand\summaryname{abstract}
+\newenvironment{abstract}%
+    {\small\begin{center}%
+    \bfseries{\summaryname} \end{center}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REQUIRED for correct formatting and tagging of BookML output: title and author
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Cálculo numérico\\\small{Um Livro Colaborativo}}
+\date{\today}
+\author{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RECOMMENDED for PDF quality: enable clickable links and metadata in PDFs
+% the option pdfusetitle adds \author and \title to the PDF metadata
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[pdfusetitle]{hyperref}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RECOMMENDED for PDF quality: higher quality equivalent of Computer Modern
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{lmodern}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% REQUIRED for TikZ: use bmlImageEnvironment for TikZ and other images, since
+%                    LaTeXML is slow and often produces garbled TikZ output
+%                    (this requires \usepackage{bookml/bookml})
+% tell BookML to compile tikzpicture and tikzcd environments into images via LaTeX
+
+\bmlImageEnvironment{tikzpicture,tikzcd}
+% hide all TikZ-related commands from LaTeXML, but leave them when generating the PDF
+\iflatexml            % are we compiling through LaTeXML?
+\else
+\usepackage{tikz}     % if not, load TikZ as usual
+\usetikzlibrary{cd}
+\usepackage[all]{xy}
+% other TikZ-related command MUST be here, before \fi
+\fi
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% OPTIONAL for accessibility: additional versions of the document (e.g. large print)
+% the additional formats will be recompiled automatically whenever there are changes
+% you may use "\jobname" instead of "template" to pick up the name from this very file
+% % \bmlAltFormat{template.pdf}{PDF (serif)} % always included; here \bmlAltFormat simply changes its label
+% % \bmlAltFormat{template-sans.pdf}{PDF (sans serif)}
+% % \bmlAltFormat{template-sans-large.pdf}{PDF (sans, large)}
+
+% very cheap way of generating a 'large print' PDF (~19% bigger)
+\ifcsname bmlCrop\endcsname % is \bmlCrop defined?
+\usepackage{crop}           % if so, load the package crop
+\fi
+%%% What is \bmlCrop?
+% template-sans-large.tex uses \input{template.tex} to read this file.
+% Before that, it defines \bmlCrop, so that the above code imports crop.
+% It also uses \PassOptionsToPackage to tweak the options of crop.
+% The result has identical pagination as the normal PDF so you do not need
+% to review both versions.
 %
-% POR SEGURANÇA, NÃO EDITE ESTE ARQUIVO
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% However, the magnification is very limited. If you need larger magnification,
+% you may have to use a larger font, in which case the large print PDF will
+% will look different and must be reviewed regularly.
 
-\documentclass[12pt]{book}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input preambulo.tex
+
 
 \begin{document}
-
-\frontmatter
-
-%titlepage
-\ifisscilab
-\title{Cálculo Numérico\\\small{Um Livro Colaborativo}\\\small{Versão Scilab}}
-\fi
-\ifisoctave
-\title{Cálculo Numérico\\\small{Um Livro Colaborativo}\\\small{Versão Octave}}
-\fi
-\ifispython
-\title{Cálculo Numérico\\\small{Um Livro Colaborativo}\\\small{Versão Python}}
-\fi
-\author{}
-\ifishtml
-\date{\today}
-\else
-\date{\today\vspace{1cm}\\\small{Veja a página do projeto em:\\
-\url{https://www.ufrgs.br/reamat}
-}
-}
-\fi
-\ifishtml
-\else
-\addcontentsline{toc}{chapter}{Capa}
+\iflatexml
+\begin{abstract}
+  % RECOMMENDED for SCORM: the abstract becomes the description of the SCORM package
+  Este livro busca abordar os tópicos de um curso moderno de cálculo numérico em nível de graduação
+\end{abstract}
 \fi
 
-\ifishtml
-\else
-\AddToShipoutPicture*{\BackgroundPic}
-\fi
+
 \maketitle
 
+\mainmatter
 \include{organizadores}
-\include{colaboradores}
 \include{licenca}
 \include{nota_organizadores}
 \include{prefacio}
 
-\ifisslide
-\tableofcontents
-\else
-\ifishtml
-\else
-\tableofcontents
-\addcontentsline{toc}{chapter}{Sumário}
+
+% %%% OPTIONAL: footer for HTML output, for instance a copyright notice
+% % note that the footer does not appear in the PDF
+% % the PDF footer can be done in any of the usual ways (e.g. fancyhdr)
+\iflatexml
+
+\begin{lxFooter}
+  Licença CC BY-SA 3.0 http://creativecommons.org/licenses/by-sa/3.0/
+\end{lxFooter}
 \fi
-\fi
+% Capítulos
 
 \mainmatter
+ 
+ \include{./cap_intro/cap_intro}
 
-\include{./cap_intro/cap_intro}
-\include{./cap_aritmetica/cap_aritmetica}
-\include{./cap_equacao1d/cap_equacao1d}
-\include{./cap_linsis/cap_linsis}
-\include{./cap_nlinsis/cap_nlinsis}
+%  \include{./cap_aritmetica/cap_aritmetica}
+%  \include{./cap_equacao1d/cap_equacao1d}
+%  \include{./cap_linsis/cap_linsis}
+%  \include{./cap_nlinsis/cap_nlinsis}
+ 
+ %ATENÇÃO ESTE CAPITULO
+ %\include{./cap_aproxfun/cap_aproxfun}
+ %FOI SEPARADO NOS SEGUINTES
+ 
+%  \include{./cap_interp/cap_interp}
+%  \include{./cap_ajuste/cap_ajuste}
+ 
+ %
+ 
+ %ATENÇÃO ESTE CAPITULO
+ %\include{./cap_derint/cap_derint}
+ %FOI SEPARADO NOS SEGUINTES
+ 
+%  \include{./cap_derivacao/cap_derivacao}
+%  \include{./cap_integracao/cap_integracao}
+ 
+ %\include{./cap_ajuste/cap_pvc}
+ %
+ 
+%  \include{./cap_pvi/cap_pvi}
+%  \include{./cap_pvc/cap_pvc}
+ 
+%  \include{./cap_python/cap_python}
+ \fi
+ 
 
-%ATENÇÃO ESTE CAPITULO
-%\include{./cap_aproxfun/cap_aproxfun}
-%FOI SEPARADO NOS SEGUINTES
-
-\include{./cap_interp/cap_interp}
-\include{./cap_ajuste/cap_ajuste}
-
-%
-
-%ATENÇÃO ESTE CAPITULO
-%\include{./cap_derint/cap_derint}
-%FOI SEPARADO NOS SEGUINTES
-
-\include{./cap_derivacao/cap_derivacao}
-\include{./cap_integracao/cap_integracao}
-
-%\include{./cap_ajuste/cap_pvc}
-%
-
-\include{./cap_pvi/cap_pvi}
-\include{./cap_pvc/cap_pvc}
-
-%%%%%%%%%%%%%%%%%%%%
-% scilab
-%%%%%%%%%%%%%%%%%%%%
-\ifisscilab
-\appendix
-\include{./cap_scilab/cap_scilab}
-\fi
-%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%
-% octave
-%%%%%%%%%%%%%%%%%%%%
-\ifisoctave
-\appendix
-\include{./cap_octave/cap_octave}
-\fi
-%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%
-% python
-%%%%%%%%%%%%%%%%%%%%
-\ifispython
-\appendix
-\include{./cap_python/cap_python}
-\fi
-%%%%%%%%%%%%%%%%%%%%
-
-%resposta dos exercícios
-\ifishtml
+% Respostas dos exercícios no final do livro
+\iflatexml
 \else
-\include{respostas}
+\input{respostas} 
 \fi
 
-%references
+
+% Referências bibliográficas
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{main}
 \addcontentsline{toc}{chapter}{Referências Bibliográficas}
-\fancyhead[RE]{Cálculo Numérico}
-\fancyhead[LO]{REFERÊNCIAS BIBLIOGRÁFICAS}
-\fancyhead[LE,RO]{\thepage}
+% \fancyhead[RE]{Cálculo numérico}
+% \fancyhead[LO]{REFERÊNCIAS BIBLIOGRÁFICAS}
+% \fancyhead[LE,RO]{\thepage}
 
-\ifishtml
-\else
-\clearpage
-\addcontentsline{toc}{chapter}{Índice Remissivo}
-\fancyhead[RE]{Cálculo Numérico}
-\fancyhead[LO]{ÍNDICE REMISSIVO}
-\fancyhead[LE,RO]{\thepage}
+
+
+\backmatter
+\input{colaboradores}
 \printindex
-\fi
 
 \end{document}
+
